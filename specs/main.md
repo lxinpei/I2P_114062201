@@ -50,13 +50,13 @@ Some of the TODOs may have their own prequisite. If there is a prequisite and it
 | TODO | Description | Score |
 |---|---|---|
 | New Map | [New Map Spec](checkpoint3/01-new-map.md) | 1 |
-| Shop | [Shop Spec](checkpoint3/02-shop.md) | 2 |
-| Online Interaction | [Online Interaction Spec](checkpoint3/03-online-interaction.md) | 4 |
-| Advance Battle | [Advance Battle Spec](checkpoint3/04-advance-battle.md) | 4 |
-| Minimap | [Minimap Spec](checkpoint3/05-minimap.md) | 2 |
-| Navigation | [Navigation Spec](checkpoint3/06-navigation.md) | 4 |
+| Shop | [Shop Spec](checkpoint3/02-shop.md) | 1 |
+| Online Interaction | [Online Interaction Spec](checkpoint3/03-online-interaction.md) | 2 |
+| Advance Battle | [Advance Battle Spec](checkpoint3/04-advance-battle.md) | 3 |
+| Minimap | [Minimap Spec](checkpoint3/05-minimap.md) | 1 |
+| Navigation | [Navigation Spec](checkpoint3/06-navigation.md) | 2 |
 
-Note: The maximum score for this checkpoint is 15 points.
+Note: The maximum score for this checkpoint's specifications is 10 points.
 
 ---
 
