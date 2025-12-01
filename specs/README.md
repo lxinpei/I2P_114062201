@@ -58,6 +58,7 @@ Some of the TODOs may have their own prequisite. If there is a prequisite and it
 
 Note: The maximum score for this checkpoint's specifications is 10 points.
 
+**IMPORTANT**
 **Important**
 We will implement a ***completeness*** score, about 5% in total. As a result, you will have 15 point score for checkpoint 3, with 10 from specs and 5 from completeness.
 
