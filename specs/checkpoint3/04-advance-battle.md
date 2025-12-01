@@ -1,6 +1,6 @@
 # Advance Battle
 
-Score: 3 points
+Score: 4 points
 
 - [ ] (2 points) Have a concept of element 
     - Some pokemon have their own elements (e.g. Water, Fire, Grass, ...)
