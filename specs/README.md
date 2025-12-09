@@ -51,7 +51,7 @@ Some of the TODOs may have their own prequisite. If there is a prequisite and it
 |---|---|---|
 | New Map | [New Map Spec](checkpoint3/01-new-map.md) | 1 |
 | Shop | [Shop Spec](checkpoint3/02-shop.md) | 2 |
-| Online Interaction | [Online Interaction Spec](checkpoint3/03-online-interaction.md) | 3 |
+| Online Interaction | [Online Interaction Spec](checkpoint3/03-online-interaction.md) | 2 |
 | Advance Battle | [Advance Battle Spec](checkpoint3/04-advance-battle.md) | 4 |
 | Minimap | [Minimap Spec](checkpoint3/05-minimap.md) | 2 |
 | Navigation | [Navigation Spec](checkpoint3/06-navigation.md) | 2 |
