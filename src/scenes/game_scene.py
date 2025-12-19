@@ -337,56 +337,63 @@ class GameScene(Scene):
         # AUTO NAVIGATION
         if hasattr(self, "nav_path") and self.nav_path:
             player = self.game_manager.player
-
-            # 目標 tile（下一格）
-            tx, ty = self.nav_path[0]
-            # tile 的世界 rect
-            tile_rect = pg.Rect(
-                tx * GameSettings.TILE_SIZE,
-                ty * GameSettings.TILE_SIZE,
-                GameSettings.TILE_SIZE,
-                GameSettings.TILE_SIZE
-            )
-
-            # 玩家 rect（用現成的）
-            player_rect = pg.Rect(
-                player.position.x,
-                player.position.y,
-                GameSettings.TILE_SIZE,
-                GameSettings.TILE_SIZE
-            )
-
-            # 只要碰到就吃掉
-            if player_rect.colliderect(tile_rect):
-                self.nav_path.pop(0)
-                if not self.nav_path:
-                    del self.nav_path
-                return
-            # 自動「按鍵導航」
+            TILE = GameSettings.TILE_SIZE
             speed = player.speed * dt
-            dx = tile_rect.centerx - player.position.x
-            dy = tile_rect.centery - player.position.y
 
-            move_x, move_y = 0, 0
+            tx, ty = self.nav_path[0]
+            target_x = tx * TILE
+            target_y = ty * TILE
+
+            dx = target_x - player.position.x
+            dy = target_y - player.position.y
+
+            move_x = 0
+            move_y = 0
+
+            # 一次只走一個方向（RPG 感）
             if abs(dx) > abs(dy):
                 if dx > 0:
                     player.direction = player.direction.RIGHT
+                    player.animation.switch("right")
+                    move_x = min(speed, dx)
                 else:
                     player.direction = player.direction.LEFT
+                    player.animation.switch("left")
+                    move_x = max(-speed, dx)
             else:
                 if dy > 0:
                     player.direction = player.direction.DOWN
+                    player.animation.switch("down")
+                    move_y = min(speed, dy)
                 else:
                     player.direction = player.direction.UP
-
-            next_rect = player_rect.move(move_x, move_y)
+                    player.animation.switch("up")
+                    move_y = max(-speed, dy)
+            # 碰撞檢查
+            next_rect = pg.Rect(
+                player.position.x + move_x,
+                player.position.y + move_y,
+                TILE,
+                TILE
+            )
 
             for wall in self.game_manager.current_map._collision_map:
                 if next_rect.colliderect(wall):
-                    return  # 擋牆就不動
+                    del self.nav_path
+                    return
 
             player.position.x += move_x
             player.position.y += move_y
+            player.animation.update_pos(player.position)
+            player.animation.update(dt)
+
+            # 到達這個 tile → 換下一個
+            if abs(dx) < 2 and abs(dy) < 2:
+                self.nav_path.pop(0)
+                if not self.nav_path:
+                    del self.nav_path
+
+            return
         # TELEPORT COOLDOWN UPDATE
         if not hasattr(self.game_manager, "teleport_cooldown"):
             self.game_manager.teleport_cooldown = 0.0
