@@ -2,8 +2,9 @@ from __future__ import annotations
 import pygame as pg
 from typing import Optional, Callable, List, Dict
 from .component import UIComponent
-from src.core.services import input_manager
+from src.core.services import input_manager, scene_manager
 from src.utils import Logger
+import time
 
 
 class ChatOverlay(UIComponent):
@@ -116,15 +117,22 @@ class ChatOverlay(UIComponent):
         # ENTER → send chat
         if input_manager.key_pressed(pg.K_RETURN):
             txt = self._input_text.strip()
+            ok = False
             if txt and self._send_callback:
                 try:
                     ok = self._send_callback(txt)
                 except Exception:
                     ok = False
 
-                if ok:
-                    self._input_text = ""
-                    self.close()
+            if ok:
+                self._input_text = ""
+                self.close()
+
+                # 即時顯示自己 bubble
+                game_scene = scene_manager._scenes.get("game")
+                if game_scene and game_scene.online_manager:
+                    pid = game_scene.online_manager.player_id
+                    game_scene._chat_bubbles[pid] = (txt, time.monotonic() + 2.5)
 
     def update(self, dt: float) -> None:
         if not self.is_open:

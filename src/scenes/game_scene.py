@@ -489,7 +489,7 @@ class GameScene(Scene):
         # This part's for the chatting feature, we've made it for you.
         if self.online_manager:
             try:
-                msgs = self.r.get_recent_chat(50)
+                msgs = self.online_manager.get_recent_chat(50)
                 max_id = self._last_chat_id_seen
                 now = time.monotonic()
                 for m in msgs:
@@ -499,7 +499,7 @@ class GameScene(Scene):
                     sender = int(m.get("from", -1))
                     text = str(m.get("text", ""))
                     if sender >= 0 and text:
-                        self._chat_bubbles[sender] = (text, now + 5.0)
+                        self._chat_bubbles[sender] = (text, now + 2.0)
                     if mid > max_id:
                         max_id = mid
                 self._last_chat_id_seen = max_id
@@ -606,8 +606,7 @@ class GameScene(Scene):
 
         self.game_manager.bag.draw(screen)
 
-        if self._chat_overlay:
-            self._chat_overlay.draw(screen)
+        
 
         # 畫商店 NPC
         cam = self.game_manager.player.camera
@@ -637,10 +636,8 @@ class GameScene(Scene):
                 # 只畫同地圖的人
                 if p["map"] == self.game_manager.current_map.path_name:
                     vis.draw(screen, camera)
-            try:
-                self._draw_chat_bubbles(screen, camera)
-            except Exception:
-                pass
+        if self.online_manager:
+            self._draw_chat_bubbles(screen, camera)
         
         self.setting_button.draw(screen)
         self.backpack_button.draw(screen)
@@ -670,6 +667,9 @@ class GameScene(Scene):
                     direction = "up"  # 終點箭頭朝上（你也可以改成 "down"）
 
                 self._draw_nav_triangle(screen, pos, direction)
+
+        if self._chat_overlay:
+            self._chat_overlay.draw(screen)
 
     def _draw_nav_triangle(self, screen, pos, direction, color=(0, 120, 255), size=6):
         x, y = pos.x, pos.y
@@ -704,7 +704,7 @@ class GameScene(Scene):
         local_pid = self.online_manager.player_id if self.online_manager else -1
         if self.game_manager.player and local_pid in self._chat_bubbles:
             text, _ = self._chat_bubbles[local_pid]
-            self._draw_bubble_for_pos(
+            self._draw_chat_bubble_for_pos(
                 screen,
                 camera,
                 self.game_manager.player.position,
@@ -796,7 +796,7 @@ class GameScene(Scene):
         """
         # 世界座標轉螢幕座標
         pos = camera.transform_position_as_position(world_pos)
-        px, py = pos.x, pos.y - 20   # 往上 20px 放泡泡
+        px, py = pos.x, pos.y - 20 # 往上放泡泡
 
         # 渲染文字
         text_surf = font.render(text, True, (0, 0, 0))
@@ -811,6 +811,12 @@ class GameScene(Scene):
         bg.fill((255, 255, 255, 220))  # 白底＋透明度
 
         screen.blit(bg, (px - box_w // 2, py - box_h))
+        pg.draw.rect(
+            screen,
+            (0, 0, 0),
+            pg.Rect(px - box_w // 2, py - box_h, box_w, box_h),
+            2
+        )
         screen.blit(text_surf, (px - tw // 2, py - box_h + padding))
 
 
