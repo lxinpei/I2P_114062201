@@ -9,7 +9,7 @@ class Bag:
     _items_data: list[Item]
 
     def __init__(self, monsters_data: list[Monster] | None = None, items_data: list[Item] | None = None):
-        self._monsters_data = monsters_data if monsters_data else []
+        self._monsters_data = list(monsters_data) if monsters_data else []
         self._items_data = items_data if items_data else []
 
     def update(self, dt: float):
@@ -30,3 +30,11 @@ class Bag:
         items = data.get("items") or []
         bag = cls(monsters, items)
         return bag
+    
+    @property
+    def monsters(self):
+        return self._monsters_data
+
+    @property
+    def items(self):
+        return self._items_data

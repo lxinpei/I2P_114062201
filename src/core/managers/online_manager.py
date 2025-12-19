@@ -60,6 +60,7 @@ class OnlineManager:
         Logger.info("OnlineManager initialized")
 
     def enter(self):
+        print("[DEBUG] OnlineManager.enter() called")
         self.start()
 
     def exit(self):
@@ -70,7 +71,7 @@ class OnlineManager:
         with self._lock:
             return list(self.list_players)
 
-    def update(self, x: float, y: float, map_name: str) -> bool:
+    def update(self, x: float, y: float, map_name: str, direction, moving) -> bool:
         """Queue position update (no dir / moving)."""
         if self.player_id == -1:
             return False
@@ -81,10 +82,15 @@ class OnlineManager:
                 "x": x,
                 "y": y,
                 "map": map_name,
+                "direction": direction,
+                "moving": moving,
             })
             return True
         except queue.Full:
             return False
+        
+
+
 
     def start(self) -> None:
         if self._ws_thread and self._ws_thread.is_alive():
@@ -197,6 +203,8 @@ class OnlineManager:
                                 "x": float(player_data.get("x", 0)),
                                 "y": float(player_data.get("y", 0)),
                                 "map": str(player_data.get("map", "")),
+                                "direction": str(player_data.get("direction", "down")),
+                                "moving": bool(player_data.get("moving", False)),
                             })
                     self.list_players = filtered
 
@@ -243,6 +251,8 @@ class OnlineManager:
                             "x": latest_update.get("x"),
                             "y": latest_update.get("y"),
                             "map": latest_update.get("map"),
+                            "direction": latest_update.get("direction"),
+                            "moving": latest_update.get("moving"),
                         }
                         await websocket.send(json.dumps(message))
                         last_update = now
@@ -265,9 +275,7 @@ class OnlineManager:
                 Logger.warning(f"WebSocket send error: {e}")
                 await asyncio.sleep(0.1)
 
-    # -----------------------------
     # Chat API
-    # -----------------------------
     def send_chat(self, text: str) -> bool:
         if self.player_id == -1:
             return False

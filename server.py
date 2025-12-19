@@ -88,6 +88,7 @@ async def broadcast_player_update():
 
 
 async def handle_client(websocket: Any):
+    print(">>> client connected")
     """Handle a WebSocket client connection"""
     player_id = -1
     
@@ -133,7 +134,10 @@ async def handle_client(websocket: Any):
                     # Use the server-assigned player_id, not client-provided
                     # HINT: This part might be helpful for direction change
                     # Maybe you can add other parameters? 
-                    PLAYER_HANDLER.update(player_id, x, y, map_name)
+                    direction = str(data.get("direction", "down"))
+                    moving = bool(data.get("moving", False))
+
+                    PLAYER_HANDLER.update(player_id, x, y, map_name, direction, moving)
                     
                 elif msg_type == "chat_send":
                     # Send chat message - use server-assigned ID

@@ -5,6 +5,13 @@ from .services import scene_manager, input_manager
 
 from src.scenes.menu_scene import MenuScene
 from src.scenes.game_scene import GameScene
+from src.scenes.setting_scene import SettingsScene
+from src.scenes.battle_scene import BattleScene
+from src.scenes.backpack_scene import BackpackScene
+from src.scenes.catch_scene import CatchScene
+from src.scenes.shop_scene import ShopScene
+from src.scenes.navigation_scene import NavigationScene
+
 
 class Engine:
 
@@ -25,10 +32,22 @@ class Engine:
 
         scene_manager.register_scene("menu", MenuScene())
         scene_manager.register_scene("game", GameScene())
+        scene_manager.register_scene("backpack", BackpackScene())
+
+        scene_manager.register_scene("battle", BattleScene())
+        scene_manager.register_scene("catch", CatchScene())
+        scene_manager.register_scene("shop", ShopScene(None))
+        scene_manager.register_scene("navigation", NavigationScene("game"))
+
+
+
+
         '''
         [TODO HACKATHON 5]
         Register the setting scene here
         '''
+        scene_manager.register_scene("setting_from_menu", SettingsScene("menu"))
+        scene_manager.register_scene("setting_from_game", SettingsScene("game"))
         scene_manager.change_scene("menu")
 
     def run(self):
@@ -45,7 +64,18 @@ class Engine:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+            # 1) 更新輸入狀態（輪詢用）
             input_manager.handle_events(event)
+
+            # 2) 把事件交給目前 scene（UI/按鈕通常需要這個）
+            scene_manager.handle_events(event)   # ✅ 你需要在 scene_manager 實作
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.running = False
+                input_manager.handle_events(event)
+        
+        
+            
 
     def update(self, dt: float):
         scene_manager.update(dt)

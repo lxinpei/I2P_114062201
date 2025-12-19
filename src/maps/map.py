@@ -40,12 +40,16 @@ class Map:
             for rect in self._collision_map:
                 pg.draw.rect(screen, (255, 0, 0), camera.transform_rect(rect), 1)
         
-    def check_collision(self, rect: pg.Rect) -> bool:
+    def check_collision(self, pos: Position) -> bool: #rect: pg.Rect
         '''
         [TODO HACKATHON 4]
         Return True if collide if rect param collide with self._collision_map
         Hint: use API colliderect and iterate each rectangle to check
         '''
+        rect = pg.Rect(pos.x, pos.y, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE)
+        for collision_rect in self._collision_map:
+            if rect.colliderect(collision_rect):
+                return True
         return False
         
     def check_teleport(self, pos: Position) -> Teleport | None:
@@ -53,6 +57,12 @@ class Map:
         Teleportation: Player can enter a building by walking into certain tiles defined inside saves/*.json, and the map will be changed
         Hint: Maybe there is an way to switch the map using something from src/core/managers/game_manager.py called switch_... 
         '''
+        player_rect = pg.Rect(int(pos.x), int(pos.y), GameSettings.TILE_SIZE, GameSettings.TILE_SIZE)
+
+        for tp in self.teleporters:
+            area = pg.Rect(int(tp.pos.x), int(tp.pos.y), GameSettings.TILE_SIZE, GameSettings.TILE_SIZE)
+            if player_rect.colliderect(area):
+                return tp
         return None
 
     def _render_all_layers(self, target: pg.Surface) -> None:
@@ -85,7 +95,9 @@ class Map:
                         Append the collision rectangle to the rects[] array
                         Remember scale the rectangle with the TILE_SIZE from settings
                         '''
-                        pass
+                        pixel_x = x * GameSettings.TILE_SIZE
+                        pixel_y = y * GameSettings.TILE_SIZE
+                        rects.append(pg.Rect(pixel_x, pixel_y, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE))
         return rects
 
     @classmethod
@@ -103,3 +115,15 @@ class Map:
                 "y": self.spawn.y // GameSettings.TILE_SIZE,
             }
         }
+    
+
+    def get_bush_tiles(self):
+        bush_tiles = []
+        for layer in self.tmxdata.visible_layers:
+            if isinstance(layer, pytmx.TiledTileLayer) and layer.name == "PokemonBush":
+                for x, y, gid in layer:
+                    if gid != 0:  # 有 tile 是草叢
+                        px = x * GameSettings.TILE_SIZE
+                        py = y * GameSettings.TILE_SIZE
+                        bush_tiles.append(pg.Rect(px, py, GameSettings.TILE_SIZE, GameSettings.TILE_SIZE))
+        return bush_tiles

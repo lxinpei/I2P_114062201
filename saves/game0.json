@@ -2,52 +2,183 @@
   "map": [
     {
       "path": "map.tmx",
-      "enemy_trainers": [
-        { "x": 24, "y": 29, "classification": "stationary", "facing": "DOWN", "max_tiles": 2 },
-        { "x": 54, "y": 16, "classification": "stationary", "facing": "UP", "max_tiles": 2 },
-        { "x": 31, "y": 31, "classification": "stationary", "facing": "UP", "max_tiles": 2 }
-      ],
       "teleport": [
-        { "x": 24, "y": 23, "destination": "gym.tmx" }
+        {
+          "x": 24,
+          "y": 23,
+          "destination": "gym.tmx",
+          "dest_x": 12,
+          "dest_y": 13
+        },
+        {
+          "x": 7,
+          "y": 32,
+          "destination": "snow.tmx",
+          "dest_x": 5,
+          "dest_y": 6
+        }
       ],
       "player": {
         "x": 16,
         "y": 30
-      }
+      },
+      "enemy_trainers": [
+        {
+          "x": 24.0,
+          "y": 29.0,
+          "classification": "stationary",
+          "facing": "DOWN",
+          "max_tiles": 2
+        },
+        {
+          "x": 54.0,
+          "y": 16.0,
+          "classification": "stationary",
+          "facing": "UP",
+          "max_tiles": 2
+        },
+        {
+          "x": 31.0,
+          "y": 31.0,
+          "classification": "stationary",
+          "facing": "UP",
+          "max_tiles": 2
+        }
+      ]
     },
     {
       "path": "gym.tmx",
       "teleport": [
-        { "x": 11, "y": 14, "destination": "map.tmx" },
-        { "x": 12, "y": 14, "destination": "map.tmx" },
-        { "x": 13, "y": 14, "destination": "map.tmx" }
+        {
+          "x": 11,
+          "y": 14,
+          "destination": "map.tmx",
+          "dest_x": 24,
+          "dest_y": 24
+        },
+        {
+          "x": 12,
+          "y": 14,
+          "destination": "map.tmx",
+          "dest_x": 24,
+          "dest_y": 24
+        },
+        {
+          "x": 13,
+          "y": 14,
+          "destination": "map.tmx",
+          "dest_x": 24,
+          "dest_y": 24
+        }
       ],
-      "roaming_mobs": [],
-      "enemy_trainers": [],
       "player": {
         "x": 12,
-        "y": 12
-      }
+        "y": 15
+      },
+      "enemy_trainers": []
+    },
+    {
+      "path": "snow.tmx",
+      "teleport": [
+        {
+          "x": 22,
+          "y": 18,
+          "destination": "map.tmx",
+          "dest_x": 8,
+          "dest_y": 32
+        }
+      ],
+      "player": {
+        "x": 5,
+        "y": 6
+      },
+      "enemy_trainers": []
     }
   ],
   "current_map": "map.tmx",
   "player": {
-    "x": 16,
-    "y": 30
+    "x": 18.478795374989357,
+    "y": 31.0
   },
   "bag": {
     "monsters": [
-      { "name": "Pikachu",   "hp": 85,  "max_hp": 100, "level": 25, "sprite_path": "menu_sprites/menusprite1.png" },
-      { "name": "Charizard", "hp": 150, "max_hp": 200, "level": 36, "sprite_path": "menu_sprites/menusprite2.png" },
-      { "name": "Blastoise", "hp": 120, "max_hp": 180, "level": 32, "sprite_path": "menu_sprites/menusprite3.png" },
-      { "name": "Venusaur",  "hp": 90,  "max_hp": 160, "level": 30, "sprite_path": "menu_sprites/menusprite4.png" },
-      { "name": "Gengar",    "hp": 110, "max_hp": 140, "level": 28, "sprite_path": "menu_sprites/menusprite5.png" },
-      { "name": "Dragonite", "hp": 180, "max_hp": 220, "level": 40, "sprite_path": "menu_sprites/menusprite6.png" }
+      {
+        "name": "Blastoise",
+        "hp": 233,
+        "max_hp": 234,
+        "level": 33,
+        "sprite_path": "assets/images/menu_sprites/sprite3.png",
+        "element": "Water",
+        "atk": 23,
+        "def": 14,
+        "evolve_level": 32,
+        "evolve_to_sprite_path": "assets/images/menu_sprites/sprite3.png",
+        "atk_buff": 3,
+        "def_buff": 0,
+        "evolved": true
+      },
+      {
+        "name": "Rocko",
+        "hp": 40,
+        "max_hp": 40,
+        "level": 4,
+        "sprite_path": "assets/images/menu_sprites/menusprite2.png"
+      },
+      {
+        "name": "Sparky",
+        "hp": 25,
+        "max_hp": 25,
+        "level": 3,
+        "sprite_path": "assets/images/menu_sprites/menusprite1.png"
+      },
+      {
+        "name": "Rocko",
+        "hp": 40,
+        "max_hp": 40,
+        "level": 2,
+        "sprite_path": "assets/images/menu_sprites/menusprite2.png"
+      },
+      {
+        "name": "Leafy",
+        "hp": 30,
+        "max_hp": 30,
+        "level": 6,
+        "sprite_path": "assets/images/menu_sprites/menusprite3.png"
+      },
+      {
+        "name": "Rocko",
+        "hp": 40,
+        "max_hp": 40,
+        "level": 5,
+        "sprite_path": "assets/images/menu_sprites/menusprite2.png"
+      }
     ],
     "items": [
-      { "name": "Potion",      "count": 5,  "sprite_path": "ingame_ui/potion.png" },
-      { "name": "Coins",       "count": 3,  "sprite_path": "ingame_ui/coin.png" },
-      { "name": "Pokeball",    "count": 10, "sprite_path": "ingame_ui/ball.png" }
+      {
+        "name": "Heal Potion",
+        "count": 3,
+        "sprite_path": "ingame_ui/heal_potion.png"
+      },
+      {
+        "name": "Coins",
+        "count": 50,
+        "sprite_path": "ingame_ui/coin.png"
+      },
+      {
+        "name": "Pokeball",
+        "count": 10,
+        "sprite_path": "ingame_ui/ball.png"
+      },
+      {
+        "name": "Strength Potion",
+        "count": 1,
+        "sprite_path": "ingame_ui/strength_potion.png"
+      },
+      {
+        "name": "Defense Potion",
+        "count": 2,
+        "sprite_path": "ingame_ui/defense_potion.png"
+      }
     ]
   }
 }

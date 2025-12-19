@@ -38,6 +38,13 @@ class EnemyTrainer(Entity):
         facing: Direction | None = None,
     ) -> None:
         super().__init__(x, y, game_manager)
+        self.monster = {
+            "name": "Leogreen",
+            "hp": 64,
+            "max_hp": 64,
+            "level": 18,
+            "sprite_path": "assets/images/menu_sprites/menusprite2.png"
+        }
         self.classification = classification
         self.max_tiles = max_tiles
         if classification == EnemyTrainerClassification.STATIONARY:
@@ -85,6 +92,23 @@ class EnemyTrainer(Entity):
         '''
         TODO: Create hitbox to detect line of sight of the enemies towards the player
         '''
+        tile = GameSettings.TILE_SIZE
+        view_tiles = 3    # 玩家距離多少格會被看到
+
+        x, y = self.position.x, self.position.y
+
+        if self.los_direction == Direction.RIGHT:
+            return pygame.Rect(x + tile, y, tile * view_tiles, tile)
+
+        if self.los_direction == Direction.LEFT:
+            return pygame.Rect(x - tile * view_tiles, y, tile * view_tiles, tile)
+
+        if self.los_direction == Direction.DOWN:
+            return pygame.Rect(x, y + tile, tile, tile * view_tiles)
+
+        if self.los_direction == Direction.UP:
+            return pygame.Rect(x, y - tile * view_tiles, tile, tile * view_tiles)
+
         return None
 
     def _has_los_to_player(self) -> None:
@@ -100,7 +124,23 @@ class EnemyTrainer(Entity):
         TODO: Implement line of sight detection
         If it's detected, set self.detected to True
         '''
-        self.detected = False
+        player = self.game_manager.player
+        if player is None:
+            self.detected = False
+            return
+
+        los_rect = self._get_los_rect()
+        if los_rect is None:
+            self.detected = False
+            return
+
+        # 玩家 hitbox
+        px, py = player.position.x, player.position.y
+        tile = GameSettings.TILE_SIZE
+        player_rect = pygame.Rect(px, py, tile, tile)
+
+        # 只要撞到視線範圍就是 detected
+        self.detected = los_rect.colliderect(player_rect)
 
     @classmethod
     @override

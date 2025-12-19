@@ -12,6 +12,16 @@ class SceneManager:
     def __init__(self):
         Logger.info("Initializing SceneManager")
         self._scenes = {}
+
+    def handle_events(self, event: pg.event.Event):
+        scene = self._current_scene
+        if scene is None:
+            return
+
+        if hasattr(scene, "handle_events"):
+            scene.handle_events(event)
+        elif hasattr(scene, "handle_event"):
+            scene.handle_event(event)
         
     def register_scene(self, name: str, scene: Scene) -> None:
         self._scenes[name] = scene

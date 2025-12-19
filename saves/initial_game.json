@@ -1,0 +1,67 @@
+{
+  "map": [
+    {
+      "path": "map.tmx",
+      "enemy_trainers": [
+        { "x": 24, "y": 29, "classification": "stationary", "facing": "DOWN", "max_tiles": 2 },
+        { "x": 54, "y": 16, "classification": "stationary", "facing": "UP", "max_tiles": 2 },
+        { "x": 31, "y": 31, "classification": "stationary", "facing": "UP", "max_tiles": 2 }
+      ],
+      "teleport": [
+        { "x": 24, "y": 23, "destination": "gym.tmx", "dest_x": 12, "dest_y": 13 },
+        { "x": 7, "y": 32, "destination": "snow.tmx", "dest_x": 5, "dest_y": 6 }
+      ],
+      "player": {
+        "x": 16,
+        "y": 30
+      }
+    },
+    {
+      "path": "gym.tmx",
+      "teleport": [
+        { "x": 11, "y": 14, "destination": "map.tmx", "dest_x": 24, "dest_y": 24 },
+        { "x": 12, "y": 14, "destination": "map.tmx", "dest_x": 24, "dest_y": 24 },
+        { "x": 13, "y": 14, "destination": "map.tmx", "dest_x": 24, "dest_y": 24 }
+      ],
+      "roaming_mobs": [],
+      "enemy_trainers": [],
+      "player": {
+        "x": 12,
+        "y": 15
+      }
+    },
+    {
+      "path": "snow.tmx",
+      "teleport": [
+        { "x": 22, "y": 18, "destination": "map.tmx", "dest_x": 8, "dest_y": 32 }
+      ],
+      "enemy_trainers": [],
+      "player": {
+        "x": 5,
+        "y": 6
+      }
+    }
+  ],
+  "current_map": "map.tmx",
+  "player": {
+    "x": 16,
+    "y": 30
+  },
+  "bag": {
+    "monsters": [
+      { "name": "Blastoise", "hp": 120, "max_hp": 180, "level": 32, "sprite_path": "assets/images/menu_sprites/menusprite3.png",
+        "element": "Water",
+        "atk": 18,
+        "def": 12,
+        "evolve_level": 32,
+        "evolve_to_sprite_path": "assets/images/menu_sprites/sprite3.png" }
+    ],
+    "items": [
+      { "name": "Heal Potion",      "count": 3,  "sprite_path": "ingame_ui/heal_potion.png" },
+      { "name": "Coins",       "count": 50,  "sprite_path": "ingame_ui/coin.png" },
+      { "name": "Pokeball",    "count": 10, "sprite_path": "ingame_ui/ball.png" },
+      { "name": "Strength Potion",      "count": 2,  "sprite_path": "ingame_ui/strength_potion.png" },
+      { "name": "Defense Potion",      "count": 2,  "sprite_path": "ingame_ui/defense_potion.png" }
+    ]
+  }
+}
