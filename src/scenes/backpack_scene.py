@@ -95,6 +95,8 @@ class BackpackScene(Scene):
             30,
             self.scroll_down
         )
+        self.VISIBLE_ROWS = 3
+        self.scroll_index = 0
 
         
         
@@ -186,8 +188,7 @@ class BackpackScene(Scene):
         list_y = self.window_rect.top + 90 + self.scroll_offset
         gap_y  = 110
 
-        start_index = int(-self.scroll_offset // gap_y)
-        start_index = max(0, start_index)
+        start_index = self.scroll_index
         end_index = min(start_index + VISIBLE_ROWS, len(bag.monsters))
 
         self.max_scroll = max(
@@ -263,9 +264,11 @@ class BackpackScene(Scene):
     
             
     def scroll_up(self):
-        self.scroll_offset += 110
-        self.scroll_offset = min(self.scroll_offset, 0)
+        self.scroll_index = max(0, self.scroll_index - 1)
 
     def scroll_down(self):
-        self.scroll_offset -= 110
-        self.scroll_offset = max(self.scroll_offset, -self.max_scroll)
+        game_scene = scene_manager._scenes["game"]
+        bag = game_scene.game_manager.bag
+
+        max_start = max(0, len(bag.monsters) - self.VISIBLE_ROWS)
+        self.scroll_index = min(max_start, self.scroll_index + 1)
