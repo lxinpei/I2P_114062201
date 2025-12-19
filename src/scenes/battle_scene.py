@@ -300,9 +300,9 @@ class BattleScene(Scene):
                 self.enemy_mon["hp"] -= dmg
 
                 if mult > 1.0:
-                    self._set_message(f"It's super effective! (-{dmg})")
+                    self._set_message(f"Attack doubled! (-{dmg})")
                 elif mult < 1.0:
-                    self._set_message(f"It's not very effective... (-{dmg})")
+                    self._set_message(f"Attack halved! (-{dmg})")
                 else:
                     self._set_message(f"Hit! (-{dmg})")
 
@@ -328,9 +328,9 @@ class BattleScene(Scene):
                 self.player_mon["hp"] -= dmg
 
                 if mult > 1.0:
-                    self._set_message(f"Enemy: super effective! (-{dmg})")
+                    self._set_message(f"Enemy attack doubled! (-{dmg})")
                 elif mult < 1.0:
-                    self._set_message(f"Enemy: not very effective... (-{dmg})")
+                    self._set_message(f"Enemy attack halved! (-{dmg})")
                 else:
                     self._set_message(f"Enemy hit! (-{dmg})")
 
