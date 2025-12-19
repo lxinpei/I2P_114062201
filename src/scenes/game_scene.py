@@ -111,12 +111,12 @@ def iter_obstacle_rects(game_scene):
     for r in getattr(game_map, "_collision_map", []):
         yield r
 
-    # 草叢（如果你規定不可走，保留）
+    # 草叢（不可走，保留）
     if hasattr(game_map, "get_bush_tiles"):
         for r in game_map.get_bush_tiles():
             yield r
 
-    # 花：你已經有 try_get_flower_rects_from_tmx 的話，直接用它
+    # 花 若已經有 try_get_flower_rects_from_tmx 直接用
     if "try_get_flower_rects_from_tmx" in globals():
         for r in try_get_flower_rects_from_tmx(game_map):
             yield r
@@ -164,7 +164,7 @@ def build_walkable_grid(game_scene):
     #for rect in game_map._collision_map:
     #    block_rect(rect)
 
-    # NPC（你現在用來碰撞的那個 rect）
+    # NPC
     npc_rect = getattr(game_scene.game_manager, "npc_collision_rect", None)
     if npc_rect is not None:
         block_rect(npc_rect)
@@ -174,7 +174,7 @@ def build_walkable_grid(game_scene):
     for rect in game_map.get_bush_tiles():
         block_rect(rect)
 
-    # 其他障礙：enemy trainers / NPC
+    # 其他障礙 enemy trainers / NPC
     for enemy in getattr(game_scene.game_manager, "current_enemy_trainers", []):
         r = getattr(getattr(enemy, "animation", None), "rect", None)
         if r:
@@ -190,7 +190,7 @@ def build_walkable_grid(game_scene):
 
 class OnlinePlayerVisual:
     def __init__(self):
-         # 你的玩家動畫圖
+         # 玩家動畫圖
         self.anim = Animation(
             "character/ow1.png",
             ["down", "left", "right", "up"],   # 必須 match 玩家 rows
@@ -286,7 +286,7 @@ class GameScene(Scene):
         # 放大到和玩家一樣大
         tile = GameSettings.TILE_SIZE
         self.npc_surface = pg.transform.scale(self.npc_surface, (tile, tile))
-        # NPC 的世界座標（你可以改你想放的位置）
+        # NPC 的世界座標
         self.shop_npc_pos = Position(18.5 * GameSettings.TILE_SIZE, 32 * GameSettings.TILE_SIZE)
 
         self.shop_npc_rect = pg.Rect(
@@ -350,7 +350,7 @@ class GameScene(Scene):
             move_x = 0
             move_y = 0
 
-            # 一次只走一個方向（RPG 感）
+            # 一次只走一個方向
             if abs(dx) > abs(dy):
                 if dx > 0:
                     player.direction = player.direction.RIGHT
@@ -387,7 +387,7 @@ class GameScene(Scene):
             player.animation.update_pos(player.position)
             player.animation.update(dt)
 
-            # 到達這個 tile → 換下一個
+            # 到達這個 tile  換下一個
             if abs(dx) < 2 and abs(dy) < 2:
                 self.nav_path.pop(0)
                 if not self.nav_path:
@@ -548,10 +548,10 @@ class GameScene(Scene):
 
         current_map = self.game_manager.current_map
 
-        # 注意：這裡用的是 Map.prebake 好的整張地圖 surface
+        # 這裡用 Map.prebake 好的整張地圖 surface
         full_map_surface: pg.Surface = current_map._surface  # 如果名字不一樣就改這行
 
-        # 小地圖大小 & 位置（可以自己微調）
+        # 小地圖大小 & 位置
         MINIMAP_W, MINIMAP_H = 180, 120
         MINIMAP_X, MINIMAP_Y = 10, 10
 
@@ -648,13 +648,42 @@ class GameScene(Scene):
 
         self.draw_minimap(screen)
 
-        if hasattr(self, "nav_path"):
-            for tx, ty in self.nav_path:
-                wx = tx * GameSettings.TILE_SIZE
-                wy = ty * GameSettings.TILE_SIZE
-                pos = camera.transform_position_as_position(Position(wx, wy))
-                pg.draw.circle(screen, (0, 120, 255), (pos.x, pos.y), 5)
+        if hasattr(self, "nav_path") and self.nav_path:
+            TILE = GameSettings.TILE_SIZE
 
+            for i, (tx, ty) in enumerate(self.nav_path):
+                wx = tx * TILE + TILE // 2
+                wy = ty * TILE + TILE // 2
+                pos = camera.transform_position_as_position(Position(wx, wy))
+
+                # 決定三角形方向（看下一個節點）
+                if i < len(self.nav_path) - 1:
+                    nx, ny = self.nav_path[i + 1]
+                    dx = nx - tx
+                    dy = ny - ty
+
+                    if abs(dx) > abs(dy):
+                        direction = "right" if dx > 0 else "left"
+                    else:
+                        direction = "down" if dy > 0 else "up"
+                else:
+                    direction = "up"  # 終點箭頭朝上（你也可以改成 "down"）
+
+                self._draw_nav_triangle(screen, pos, direction)
+
+    def _draw_nav_triangle(self, screen, pos, direction, color=(0, 120, 255), size=6):
+        x, y = pos.x, pos.y
+
+        if direction == "right":
+            points = [(x + size, y), (x - size, y - size), (x - size, y + size)]
+        elif direction == "left":
+            points = [(x - size, y), (x + size, y - size), (x + size, y + size)]
+        elif direction == "down":
+            points = [(x, y + size), (x - size, y - size), (x + size, y - size)]
+        else:  # "up"
+            points = [(x, y - size), (x - size, y + size), (x + size, y + size)]
+
+        pg.draw.polygon(screen, color, points)
 
 
     def _draw_chat_bubbles(self, screen: pg.Surface, camera: PositionCamera) -> None:
