@@ -18,21 +18,27 @@ class CatchScene(Scene):
                 "hp": 30,
                 "max_hp": 30,
                 "level": 5,
-                "sprite_path": "assets/images/menu_sprites/menusprite3.png"
+                "sprite_path": "assets/images/menu_sprites/menusprite3.png",
+                "evolve_level": 6,
+                "evolve_to_sprite_path": "assets/images/menu_sprites/sprite3.png"
             },
             {
                 "name": "Sparky",
                 "hp": 25,
                 "max_hp": 25,
                 "level": 4,
-                "sprite_path": "assets/images/menu_sprites/menusprite1.png"
+                "sprite_path": "assets/images/menu_sprites/menusprite1.png",
+                "evolve_level": 5,
+                "evolve_to_sprite_path": "assets/images/menu_sprites/menusprite2.png"
             },
             {
                 "name": "Rocko",
                 "hp": 40,
                 "max_hp": 40,
                 "level": 6,
-                "sprite_path": "assets/images/menu_sprites/menusprite2.png"
+                "sprite_path": "assets/images/menu_sprites/menusprite2.png",
+                "evolve_level": 7,
+                "evolve_to_sprite_path": "assets/images/menu_sprites/menusprite3.png"
             }
         ]
         self.mon = None
